@@ -78,3 +78,8 @@ footer {
   font-size: 0.9rem;
   text-align: center;
 }
+
+/* Utility classes */
+.mt-lg {
+  margin-top: 2rem;
+}
