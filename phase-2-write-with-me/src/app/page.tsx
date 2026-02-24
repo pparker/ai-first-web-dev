@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Home() {
   return (
     <div style={{
@@ -11,16 +13,18 @@ export default function Home() {
     }}>
       <h1>Write With Me</h1>
       <p>Create magical stories together.</p>
-      <button
-        style={{
-          marginTop: '1rem',
-          padding: '0.5rem 1rem',
-          fontSize: '1rem',
-          cursor: 'pointer',
-        }}
-      >
-        Start
-      </button>
+      <Link href="/select">
+        <button
+          style={{
+            marginTop: '1rem',
+            padding: '0.5rem 1rem',
+            fontSize: '1rem',
+            cursor: 'pointer',
+          }}
+        >
+          Start
+        </button>
+      </Link>
     </div>
   );
 }
