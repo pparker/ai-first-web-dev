@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function SelectPage() {
   return (
     <div style={{
@@ -11,9 +13,15 @@ export default function SelectPage() {
     }}>
       <h1>Choose Your Storyteller</h1>
       <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
-        <button>Ellie</button>
-        <button>Clara</button>
-        <button>Guest</button>
+        <Link href="/builder/ellie">
+          <button>Ellie</button>
+        </Link>
+        <Link href="/builder/clara">
+          <button>Clara</button>
+        </Link>
+        <Link href="/builder/guest">
+          <button>Guest</button>
+        </Link>
       </div>
     </div>
   );
