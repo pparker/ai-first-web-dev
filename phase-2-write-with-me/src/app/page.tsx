@@ -1,30 +1,23 @@
-import Link from 'next/link';
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
+export default function StoryPage() {
+  const searchParams = useSearchParams();
+  const story = searchParams.get("text");
+
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      textAlign: 'center',
-      padding: '0 1rem',
-    }}>
-      <h1>Write With Me</h1>
-      <p>Create magical stories together.</p>
-      <Link href="/select">
-        <button
-          style={{
-            marginTop: '1rem',
-            padding: '0.5rem 1rem',
-            fontSize: '1rem',
-            cursor: 'pointer',
-          }}
-        >
-          Start
-        </button>
-      </Link>
-    </div>
+    <main style={{ padding: "2rem", maxWidth: "700px" }}>
+      <h1>Your Story</h1>
+
+      <p style={{ whiteSpace: "pre-wrap", marginTop: "1rem" }}>
+        {story ?? "No story found."}
+      </p>
+
+      <div style={{ marginTop: "2rem" }}>
+        <Link href="/select">Start Again</Link>
+      </div>
+    </main>
   );
 }
