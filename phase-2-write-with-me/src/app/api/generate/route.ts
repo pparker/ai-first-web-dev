@@ -6,6 +6,13 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 export async function POST(request: Request) {
   const { child, idea, length, tone } = await request.json();
 
+  const wordCount: Record<string, string> = {
+    short: 'under 250 words',
+    medium: 'between 250 and 600 words',
+    long: 'between 600 and 1200 words',
+  };
+  const targetLength = wordCount[length] ?? 'around 400 words';
+
   try {
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
@@ -13,7 +20,7 @@ export async function POST(request: Request) {
       messages: [
         {
           role: 'user',
-          content: `Write a ${tone} children's story for a child named ${child}. The story should be ${length} and based on this idea: ${idea}. Write only the story text, no titles or meta-commentary.`,
+          content: `Write a ${tone} children's story for a child named ${child}. The story should be ${targetLength} and based on this idea: ${idea}. Write only the story text, no titles or meta-commentary.`,
         },
       ],
     });

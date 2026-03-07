@@ -1,17 +1,18 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, type FormEvent } from 'react';
 
 export default function BuilderPage() {
   const params = useParams<{ child: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const child = params.child;
 
-  const [idea, setIdea] = useState('');
-  const [length, setLength] = useState('medium');
-  const [tone, setTone] = useState('funny');
+  const [idea, setIdea] = useState(searchParams.get('idea') ?? '');
+  const [length, setLength] = useState(searchParams.get('length') ?? 'medium');
+  const [tone, setTone] = useState(searchParams.get('tone') ?? 'funny');
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -25,7 +26,8 @@ export default function BuilderPage() {
     });
 
     const data = await res.json();
-    router.push(`/story?text=${encodeURIComponent(data.story)}`);
+    const qs = new URLSearchParams({ text: data.story, child, idea, length, tone });
+    router.push(`/story?${qs.toString()}`);
   }
 
   return (

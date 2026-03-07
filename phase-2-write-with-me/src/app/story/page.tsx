@@ -1,7 +1,11 @@
 import Link from 'next/link';
 
-export default async function StoryPage({ searchParams }: { searchParams: Promise<{ text?: string }> }) {
-  const { text } = await searchParams;
+export default async function StoryPage({ searchParams }: { searchParams: Promise<{ text?: string; child?: string; idea?: string; length?: string; tone?: string }> }) {
+  const { text, child, idea, length, tone } = await searchParams;
+
+  const editHref = child
+    ? `/builder/${child}?${new URLSearchParams({ idea: idea ?? '', length: length ?? 'medium', tone: tone ?? 'funny' }).toString()}`
+    : '/select';
 
   if (!text) {
     return (
@@ -36,7 +40,7 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
 
       <nav style={{ marginTop: '2rem', display: 'flex', gap: '1.5rem' }}>
         <Link href="/select">Create another story</Link>
-        <Link href="/select">Edit your prompt</Link>
+        <Link href={editHref}>Edit your prompt</Link>
       </nav>
     </main>
   );
