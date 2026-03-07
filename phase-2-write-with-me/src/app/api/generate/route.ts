@@ -20,7 +20,15 @@ export async function POST(request: Request) {
       messages: [
         {
           role: 'user',
-          content: `Write a ${tone} children's story for a child named ${child}. The story should be ${targetLength} and based on this idea: ${idea}. Write only the story text, no titles or meta-commentary.`,
+          content: `Write a children's story with the following requirements:
+
+- The main character is a child named ${child}.
+- The story is based on this idea: ${idea}
+- Tone: ${tone}. Keep this tone consistent throughout.
+- Length: ${targetLength}. Stay within this range.
+- Audience: children aged 5–11. Use simple, clear language and short sentences.
+- Structure: include a clear beginning, middle, and satisfying ending.
+- Output only the story text. Do not include a title, headings, author notes, or any explanation.`,
         },
       ],
     });
