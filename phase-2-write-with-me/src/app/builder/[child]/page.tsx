@@ -17,6 +17,8 @@ export default function BuilderPage() {
   const [length, setLength] = useState(searchParams.get('length') ?? 'medium');
   const [tone, setTone] = useState(searchParams.get('tone') ?? 'funny');
   const [loading, setLoading] = useState(false);
+  const [ideaError, setIdeaError] = useState('');
+  const [error, setError] = useState('');
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,18 +29,37 @@ export default function BuilderPage() {
     }
     setGuestNameError('');
 
+    if (!idea.trim()) {
+      setIdeaError('Please enter a story idea.');
+      return;
+    }
+    setIdeaError('');
+    setError('');
+
     const resolvedChild = isGuest ? guestName.trim() : child;
     setLoading(true);
 
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ child: resolvedChild, idea, length, tone }),
-    });
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ child: resolvedChild, idea, length, tone }),
+      });
 
-    const data = await res.json();
-    const qs = new URLSearchParams({ text: data.story, child, idea, length, tone, ...(isGuest && { guestName: guestName.trim() }) });
-    router.push(`/story?${qs.toString()}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error ?? 'Something went wrong. Please try again.');
+        return;
+      }
+
+      const qs = new URLSearchParams({ text: data.story, child, idea, length, tone, ...(isGuest && { guestName: guestName.trim() }) });
+      router.push(`/story?${qs.toString()}`);
+    } catch {
+      setError('Could not reach the server. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -65,10 +86,11 @@ export default function BuilderPage() {
           <label>Story Idea</label>
           <textarea
             value={idea}
-            onChange={e => setIdea(e.target.value)}
+            onChange={e => { setIdea(e.target.value); setIdeaError(''); }}
             rows={4}
             style={{ display: 'block', width: '100%', marginTop: '0.25rem', fontSize: '1rem' }}
           />
+          {ideaError && <p style={{ color: 'red', margin: '0.25rem 0 0' }}>{ideaError}</p>}
         </div>
 
         <div>
@@ -97,8 +119,10 @@ export default function BuilderPage() {
           </select>
         </div>
 
-        <button type="submit" disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem', cursor: 'pointer' }}>
-          {loading ? 'Generating...' : 'Generate Story'}
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+
+        <button type="submit" disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer' }}>
+          {loading ? 'Generating story...' : 'Generate Story'}
         </button>
       </form>
     </main>
