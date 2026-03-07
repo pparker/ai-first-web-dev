@@ -10,6 +10,9 @@ export default function BuilderPage() {
   const searchParams = useSearchParams();
   const child = params.child;
 
+  const isGuest = child === 'guest';
+  const [guestName, setGuestName] = useState(searchParams.get('guestName') ?? '');
+  const [guestNameError, setGuestNameError] = useState('');
   const [idea, setIdea] = useState(searchParams.get('idea') ?? '');
   const [length, setLength] = useState(searchParams.get('length') ?? 'medium');
   const [tone, setTone] = useState(searchParams.get('tone') ?? 'funny');
@@ -17,16 +20,24 @@ export default function BuilderPage() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (isGuest && !guestName.trim()) {
+      setGuestNameError('Please enter the child\'s name.');
+      return;
+    }
+    setGuestNameError('');
+
+    const resolvedChild = isGuest ? guestName.trim() : child;
     setLoading(true);
 
     const res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ child, idea, length, tone }),
+      body: JSON.stringify({ child: resolvedChild, idea, length, tone }),
     });
 
     const data = await res.json();
-    const qs = new URLSearchParams({ text: data.story, child, idea, length, tone });
+    const qs = new URLSearchParams({ text: data.story, child, idea, length, tone, ...(isGuest && { guestName: guestName.trim() }) });
     router.push(`/story?${qs.toString()}`);
   }
 
@@ -37,6 +48,19 @@ export default function BuilderPage() {
       <Link href="/select">Change storyteller</Link>
 
       <form onSubmit={handleSubmit} style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        {isGuest && (
+          <div>
+            <label>{"Child's name"}</label>
+            <input
+              type="text"
+              value={guestName}
+              onChange={e => { setGuestName(e.target.value); setGuestNameError(''); }}
+              placeholder="Enter the child's name"
+              style={{ display: 'block', width: '100%', marginTop: '0.25rem', fontSize: '1rem' }}
+            />
+            {guestNameError && <p style={{ color: 'red', margin: '0.25rem 0 0' }}>{guestNameError}</p>}
+          </div>
+        )}
         <div>
           <label>Story Idea</label>
           <textarea
