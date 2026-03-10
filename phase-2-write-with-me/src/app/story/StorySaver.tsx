@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 
 const STORAGE_KEY = 'write-with-me-stories';
 
-export default function StorySaver({ child, idea, tone, length, text }: {
-  child: string; idea: string; tone: string; length: string; text: string;
+export default function StorySaver({ child, idea, tone, length, text, guestName }: {
+  child: string; idea: string; tone: string; length: string; text: string; guestName?: string;
 }) {
   useEffect(() => {
     const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
@@ -12,7 +12,9 @@ export default function StorySaver({ child, idea, tone, length, text }: {
       s.child === child && s.idea === idea && s.tone === tone && s.length === length && s.text === text
     );
     if (isDuplicate) return;
-    const updated = [{ child, idea, tone, length, text, savedAt: Date.now() }, ...existing];
+    const entry: Record<string, string | number> = { child, idea, tone, length, text, savedAt: Date.now() };
+    if (guestName) entry.guestName = guestName;
+    const updated = [entry, ...existing];
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   }, []);
 

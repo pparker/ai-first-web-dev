@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import StorySaver from './StorySaver';
 
-export default async function StoryPage({ searchParams }: { searchParams: Promise<{ text?: string; child?: string; idea?: string; length?: string; tone?: string }> }) {
-  const { text, child, idea, length, tone } = await searchParams;
+export default async function StoryPage({ searchParams }: { searchParams: Promise<{ text?: string; child?: string; idea?: string; length?: string; tone?: string; guestName?: string }> }) {
+  const { text, child, idea, length, tone, guestName } = await searchParams;
 
-  const editHref = child
-    ? `/builder/${child}?${new URLSearchParams({ idea: idea ?? '', length: length ?? 'medium', tone: tone ?? 'funny' }).toString()}`
-    : '/select';
+  const editParams: Record<string, string> = { idea: idea ?? '', length: length ?? 'medium', tone: tone ?? 'funny' };
+  if (child === 'guest' && guestName) editParams.guestName = guestName;
+  const editHref = child ? `/builder/${child}?${new URLSearchParams(editParams).toString()}` : '/select';
 
   if (!text) {
     return (
@@ -26,7 +26,7 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
     <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Your Story</h1>
 
-      <StorySaver child={child ?? ''} idea={idea ?? ''} tone={tone ?? ''} length={length ?? ''} text={text} />
+      <StorySaver child={child ?? ''} idea={idea ?? ''} tone={tone ?? ''} length={length ?? ''} text={text} guestName={guestName} />
 
       <p style={{
         marginTop: '1.5rem',

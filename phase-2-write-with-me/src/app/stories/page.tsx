@@ -11,6 +11,7 @@ type SavedStory = {
   length: string;
   text: string;
   savedAt: number;
+  guestName?: string;
 };
 
 export default function StoriesPage() {
@@ -35,7 +36,9 @@ export default function StoriesPage() {
       <h1>Saved Stories</h1>
       <ul style={{ marginTop: '1.5rem', listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {stories.map((s) => {
-          const qs = new URLSearchParams({ text: s.text, child: s.child, idea: s.idea, length: s.length, tone: s.tone });
+          const qsParams: Record<string, string> = { text: s.text, child: s.child, idea: s.idea, length: s.length, tone: s.tone };
+          if (s.guestName) qsParams.guestName = s.guestName;
+          const qs = new URLSearchParams(qsParams);
           return (
             <li key={s.savedAt} style={{ borderBottom: '1px solid #e0e0e0', paddingBottom: '0.75rem' }}>
               <Link href={`/story?${qs.toString()}`}>
