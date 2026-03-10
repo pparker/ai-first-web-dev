@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import StorySaver from './StorySaver';
 
 export default async function StoryPage({ searchParams }: { searchParams: Promise<{ text?: string; child?: string; idea?: string; length?: string; tone?: string }> }) {
   const { text, child, idea, length, tone } = await searchParams;
@@ -24,6 +25,8 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
   return (
     <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Your Story</h1>
+
+      <StorySaver child={child ?? ''} idea={idea ?? ''} tone={tone ?? ''} length={length ?? ''} text={text} />
 
       <p style={{
         marginTop: '1.5rem',
