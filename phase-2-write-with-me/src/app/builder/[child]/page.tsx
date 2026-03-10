@@ -66,68 +66,60 @@ export default function BuilderPage() {
   return (
     <>
       <Nav />
-      <main style={{ padding: '2rem', maxWidth: '600px' }}>
-      <h1>Story Builder</h1>
-      <p>Storyteller: <strong>{child}</strong></p>
-      <Link href="/select">Change storyteller</Link>
+      <main className="page-main">
+        <h1>Story Builder</h1>
+        <p>Storyteller: <strong>{child}</strong></p>
+        <Link href="/select">Change storyteller</Link>
 
-      <form onSubmit={handleSubmit} style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {isGuest && (
+        <form onSubmit={handleSubmit} className="form">
+          {isGuest && (
+            <div>
+              <label>{"Child's name"}</label>
+              <input
+                type="text"
+                value={guestName}
+                onChange={e => { setGuestName(e.target.value); setGuestNameError(''); }}
+                placeholder="Enter the child's name"
+                className="form-control"
+              />
+              {guestNameError && <p className="error-text">{guestNameError}</p>}
+            </div>
+          )}
           <div>
-            <label>{"Child's name"}</label>
-            <input
-              type="text"
-              value={guestName}
-              onChange={e => { setGuestName(e.target.value); setGuestNameError(''); }}
-              placeholder="Enter the child's name"
-              style={{ display: 'block', width: '100%', marginTop: '0.25rem', fontSize: '1rem' }}
+            <label>Story Idea</label>
+            <textarea
+              value={idea}
+              onChange={e => { setIdea(e.target.value); setIdeaError(''); }}
+              rows={4}
+              className="form-control"
             />
-            {guestNameError && <p style={{ color: 'red', margin: '0.25rem 0 0' }}>{guestNameError}</p>}
+            {ideaError && <p className="error-text">{ideaError}</p>}
           </div>
-        )}
-        <div>
-          <label>Story Idea</label>
-          <textarea
-            value={idea}
-            onChange={e => { setIdea(e.target.value); setIdeaError(''); }}
-            rows={4}
-            style={{ display: 'block', width: '100%', marginTop: '0.25rem', fontSize: '1rem' }}
-          />
-          {ideaError && <p style={{ color: 'red', margin: '0.25rem 0 0' }}>{ideaError}</p>}
-        </div>
 
-        <div>
-          <label>Length</label>
-          <select
-            value={length}
-            onChange={e => setLength(e.target.value)}
-            style={{ display: 'block', width: '100%', marginTop: '0.25rem', fontSize: '1rem' }}
-          >
-            <option value="short">Short</option>
-            <option value="medium">Medium</option>
-            <option value="long">Long</option>
-          </select>
-        </div>
+          <div>
+            <label>Length</label>
+            <select value={length} onChange={e => setLength(e.target.value)} className="form-control">
+              <option value="short">Short</option>
+              <option value="medium">Medium</option>
+              <option value="long">Long</option>
+            </select>
+          </div>
 
-        <div>
-          <label>Tone</label>
-          <select
-            value={tone}
-            onChange={e => setTone(e.target.value)}
-            style={{ display: 'block', width: '100%', marginTop: '0.25rem', fontSize: '1rem' }}
-          >
-            <option value="funny">Funny</option>
-            <option value="adventurous">Adventurous</option>
-            <option value="calm">Calm</option>
-          </select>
-        </div>
+          <div>
+            <label>Tone</label>
+            <select value={tone} onChange={e => setTone(e.target.value)} className="form-control">
+              <option value="funny">Funny</option>
+              <option value="adventurous">Adventurous</option>
+              <option value="calm">Calm</option>
+            </select>
+          </div>
 
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+          {error && <p className="error-text">{error}</p>}
 
-        <button type="submit" disabled={loading} style={{ padding: '0.5rem 1rem', fontSize: '1rem', cursor: loading ? 'not-allowed' : 'pointer' }}>
-          {loading ? 'Generating story...' : 'Generate Story'}
-        </button>
-      </form>
+          <button type="submit" disabled={loading} className="btn" style={{ cursor: loading ? 'not-allowed' : 'pointer' }}>
+            {loading ? 'Generating story...' : 'Generate Story'}
+          </button>
+        </form>
       </main>
     </>
   );

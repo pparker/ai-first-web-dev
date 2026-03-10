@@ -13,14 +13,10 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
     return (
       <>
         <Nav />
-        <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+        <main className="page-main mx-auto">
           <h1>Your Story</h1>
-          <p style={{ marginTop: '1rem', color: '#555' }}>
-            No story found. Head back and create one!
-          </p>
-          <Link href="/select" style={{ display: 'inline-block', marginTop: '1rem' }}>
-            Choose a storyteller
-          </Link>
+          <p className="muted-text">No story found. Head back and create one!</p>
+          <Link href="/select" className="inline-block mt-1">Choose a storyteller</Link>
         </main>
       </>
     );
@@ -29,28 +25,14 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
   return (
     <>
       <Nav />
-      <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Your Story</h1>
-
-      <StorySaver child={child ?? ''} idea={idea ?? ''} tone={tone ?? ''} length={length ?? ''} text={text} guestName={guestName} />
-
-      <p style={{
-        marginTop: '1.5rem',
-        lineHeight: '1.8',
-        fontSize: '1.1rem',
-        whiteSpace: 'pre-wrap',
-        background: '#f9f9f9',
-        padding: '1.5rem',
-        borderRadius: '8px',
-        border: '1px solid #e0e0e0',
-      }}>
-        {text}
-      </p>
-
-      <nav style={{ marginTop: '2rem', display: 'flex', gap: '1.5rem' }}>
-        <Link href="/select">Create another story</Link>
-        <Link href={editHref}>Edit your prompt</Link>
-      </nav>
+      <main className="page-main mx-auto">
+        <h1>Your Story</h1>
+        <StorySaver child={child ?? ''} idea={idea ?? ''} tone={tone ?? ''} length={length ?? ''} text={text} guestName={guestName} />
+        <p className="story-body">{text}</p>
+        <nav className="story-actions">
+          <Link href="/select">Create another story</Link>
+          <Link href={editHref}>Edit your prompt</Link>
+        </nav>
       </main>
     </>
   );
