@@ -21,6 +21,12 @@ export default function StoriesPage() {
     setStories(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]'));
   }, []);
 
+  function deleteStory(savedAt: number) {
+    const updated = stories.filter((s) => s.savedAt !== savedAt);
+    setStories(updated);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  }
+
   if (stories.length === 0) {
     return (
       <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
@@ -41,12 +47,18 @@ export default function StoriesPage() {
           const qs = new URLSearchParams(qsParams);
           return (
             <li key={s.savedAt} style={{ borderBottom: '1px solid #e0e0e0', paddingBottom: '0.75rem' }}>
-              <Link href={`/story?${qs.toString()}`}>
-                <strong>{s.child}</strong> — {s.idea}
+              <Link href={`/story?${qs.toString()}`} style={{ fontWeight: 'bold' }}>
+                {s.child} — {s.idea}
               </Link>
-              <p style={{ fontSize: '0.85rem', color: '#888', margin: '0.2rem 0 0' }}>
-                {new Date(s.savedAt).toLocaleDateString()}
+              <p style={{ fontSize: '0.85rem', color: '#555', margin: '0.3rem 0 0' }}>
+                {s.tone} · {s.length} · {new Date(s.savedAt).toLocaleDateString()}
               </p>
+              <button
+                onClick={() => deleteStory(s.savedAt)}
+                style={{ marginTop: '0.4rem', fontSize: '0.8rem', color: '#c00', background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+              >
+                Delete
+              </button>
             </li>
           );
         })}
