@@ -5,11 +5,11 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <div className="page-centered" style={{ minHeight: 'calc(100vh - 57px)' }}>
+      <div className="page-centered" style={{ minHeight: 'calc(100vh - 52px)' }}>
         <h1>Write With Me</h1>
-        <p>Create magical stories together.</p>
+        <p className="muted-text" style={{ marginTop: '0.75rem' }}>Create magical stories together.</p>
         <Link href="/select">
-          <button className="btn mt-1">Start</button>
+          <button className="btn mt-1">Start Writing</button>
         </Link>
       </div>
     </>

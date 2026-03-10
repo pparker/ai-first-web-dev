@@ -116,7 +116,7 @@ export default function BuilderPage() {
 
           {error && <p className="error-text">{error}</p>}
 
-          <button type="submit" disabled={loading} className="btn" style={{ cursor: loading ? 'not-allowed' : 'pointer' }}>
+          <button type="submit" disabled={loading} className="btn">
             {loading ? 'Generating story...' : 'Generate Story'}
           </button>
         </form>
