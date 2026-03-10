@@ -1,16 +1,19 @@
 import Link from 'next/link';
+import Nav from './components/Nav';
 
 export default function Home() {
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      textAlign: 'center',
-      padding: '0 1rem',
-    }}>
+    <>
+      <Nav />
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: 'calc(100vh - 57px)',
+        textAlign: 'center',
+        padding: '0 1rem',
+      }}>
       <h1>Write With Me</h1>
       <p>Create magical stories together.</p>
       <Link href="/select">
@@ -23,6 +26,7 @@ export default function Home() {
           Start
         </button>
       </Link>
-    </div>
+      </div>
+    </>
   );
 }

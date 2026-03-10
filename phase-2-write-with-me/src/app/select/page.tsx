@@ -1,8 +1,11 @@
 import Link from 'next/link';
+import Nav from '../components/Nav';
 
 export default function SelectPage() {
   return (
-    <div style={{
+    <>
+      <Nav />
+      <div style={{
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -24,5 +27,6 @@ export default function SelectPage() {
         </Link>
       </div>
     </div>
+    </>
   );
 }

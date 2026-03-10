@@ -3,6 +3,7 @@
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useState, type FormEvent } from 'react';
+import Nav from '../../components/Nav';
 
 export default function BuilderPage() {
   const params = useParams<{ child: string }>();
@@ -63,7 +64,9 @@ export default function BuilderPage() {
   }
 
   return (
-    <main style={{ padding: '2rem', maxWidth: '600px' }}>
+    <>
+      <Nav />
+      <main style={{ padding: '2rem', maxWidth: '600px' }}>
       <h1>Story Builder</h1>
       <p>Storyteller: <strong>{child}</strong></p>
       <Link href="/select">Change storyteller</Link>
@@ -125,6 +128,7 @@ export default function BuilderPage() {
           {loading ? 'Generating story...' : 'Generate Story'}
         </button>
       </form>
-    </main>
+      </main>
+    </>
   );
 }

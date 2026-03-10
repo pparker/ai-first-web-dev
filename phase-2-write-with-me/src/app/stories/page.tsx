@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Nav from '../components/Nav';
 
 const STORAGE_KEY = 'write-with-me-stories';
 
@@ -29,16 +30,21 @@ export default function StoriesPage() {
 
   if (stories.length === 0) {
     return (
-      <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-        <h1>Saved Stories</h1>
-        <p style={{ marginTop: '1rem', color: '#555' }}>No stories saved yet.</p>
-        <Link href="/select" style={{ display: 'inline-block', marginTop: '1rem' }}>Create one</Link>
-      </main>
+      <>
+        <Nav />
+        <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+          <h1>Saved Stories</h1>
+          <p style={{ marginTop: '1rem', color: '#555' }}>No stories saved yet.</p>
+          <Link href="/select" style={{ display: 'inline-block', marginTop: '1rem' }}>Create one</Link>
+        </main>
+      </>
     );
   }
 
   return (
-    <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+    <>
+      <Nav />
+      <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Saved Stories</h1>
       <ul style={{ marginTop: '1.5rem', listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {stories.map((s) => {
@@ -64,6 +70,7 @@ export default function StoriesPage() {
         })}
       </ul>
       <Link href="/select" style={{ display: 'inline-block', marginTop: '2rem' }}>Create a new story</Link>
-    </main>
+      </main>
+    </>
   );
 }

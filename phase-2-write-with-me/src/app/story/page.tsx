@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import StorySaver from './StorySaver';
+import Nav from '../components/Nav';
 
 export default async function StoryPage({ searchParams }: { searchParams: Promise<{ text?: string; child?: string; idea?: string; length?: string; tone?: string; guestName?: string }> }) {
   const { text, child, idea, length, tone, guestName } = await searchParams;
@@ -10,20 +11,25 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
 
   if (!text) {
     return (
-      <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
-        <h1>Your Story</h1>
-        <p style={{ marginTop: '1rem', color: '#555' }}>
-          No story found. Head back and create one!
-        </p>
-        <Link href="/select" style={{ display: 'inline-block', marginTop: '1rem' }}>
-          Choose a storyteller
-        </Link>
-      </main>
+      <>
+        <Nav />
+        <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+          <h1>Your Story</h1>
+          <p style={{ marginTop: '1rem', color: '#555' }}>
+            No story found. Head back and create one!
+          </p>
+          <Link href="/select" style={{ display: 'inline-block', marginTop: '1rem' }}>
+            Choose a storyteller
+          </Link>
+        </main>
+      </>
     );
   }
 
   return (
-    <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
+    <>
+      <Nav />
+      <main style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto' }}>
       <h1>Your Story</h1>
 
       <StorySaver child={child ?? ''} idea={idea ?? ''} tone={tone ?? ''} length={length ?? ''} text={text} guestName={guestName} />
@@ -45,6 +51,7 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
         <Link href="/select">Create another story</Link>
         <Link href={editHref}>Edit your prompt</Link>
       </nav>
-    </main>
+      </main>
+    </>
   );
 }
