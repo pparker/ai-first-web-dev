@@ -54,7 +54,7 @@ export default function StoriesPage() {
           return (
             <li key={s.savedAt} style={{ borderBottom: '1px solid #e0e0e0', paddingBottom: '0.75rem' }}>
               <Link href={`/story?${qs.toString()}`} style={{ fontWeight: 'bold' }}>
-                {s.child} — {s.idea}
+                {s.guestName ? `${s.guestName} (guest)` : s.child} — {s.idea}
               </Link>
               <p style={{ fontSize: '0.85rem', color: '#555', margin: '0.3rem 0 0' }}>
                 {s.tone} · {s.length} · {new Date(s.savedAt).toLocaleDateString()}
