@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import StorySaver from './StorySaver';
+import StoryView from './StoryView';
 import Nav from '../components/Nav';
 
 export default async function StoryPage({ searchParams }: { searchParams: Promise<{ text?: string; child?: string; idea?: string; length?: string; tone?: string; guestName?: string }> }) {
@@ -22,17 +22,23 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
     );
   }
 
+  const canRegenerate = !!(child && idea && tone && length);
+
   return (
     <>
       <Nav />
       <main className="page-main mx-auto">
         <h1>Your Story</h1>
-        <StorySaver child={child ?? ''} idea={idea ?? ''} tone={tone ?? ''} length={length ?? ''} text={text} guestName={guestName} />
-        <p className="story-body">{text}</p>
-        <nav className="story-actions">
-          <Link href="/select">Create another story</Link>
-          <Link href={editHref}>Edit your prompt</Link>
-        </nav>
+        <StoryView
+          text={text}
+          child={child ?? ''}
+          idea={idea ?? ''}
+          tone={tone ?? ''}
+          length={length ?? ''}
+          guestName={guestName}
+          editHref={editHref}
+          canRegenerate={canRegenerate}
+        />
       </main>
     </>
   );
