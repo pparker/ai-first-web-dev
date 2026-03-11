@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import StorySaver from './StorySaver';
 
 type Props = {
+  title?: string;
   text: string;
   child: string;
   idea: string;
@@ -15,7 +16,7 @@ type Props = {
   canRegenerate: boolean;
 };
 
-export default function StoryView({ text: initialText, child, idea, tone, length, guestName, editHref, canRegenerate }: Props) {
+export default function StoryView({ title, text: initialText, child, idea, tone, length, guestName, editHref, canRegenerate }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -36,7 +37,7 @@ export default function StoryView({ text: initialText, child, idea, tone, length
         setError(data.error ?? 'Something went wrong. Please try again.');
         return;
       }
-      const qsParams: Record<string, string> = { text: data.story, child, idea, tone, length };
+      const qsParams: Record<string, string> = { title: data.title ?? '', text: data.story, child, idea, tone, length };
       if (guestName) qsParams.guestName = guestName;
       router.push(`/story?${new URLSearchParams(qsParams).toString()}`);
     } catch {
@@ -48,8 +49,13 @@ export default function StoryView({ text: initialText, child, idea, tone, length
 
   return (
     <>
-      <StorySaver child={child} idea={idea} tone={tone} length={length} text={initialText} guestName={guestName} />
-      <p className="story-body">{initialText}</p>
+      <StorySaver title={title} child={child} idea={idea} tone={tone} length={length} text={initialText} guestName={guestName} />
+      {title && <h2 className="story-title">{title}</h2>}
+      <div className="story-body">
+        {initialText.split(/\n\n+/).map((para, i) => (
+          <p key={i}>{para.trim()}</p>
+        ))}
+      </div>
       {error && <p className="error-text mt-1">{error}</p>}
       <nav className="story-actions">
         <Link href="/select">Create another story</Link>

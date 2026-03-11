@@ -2,8 +2,8 @@ import Link from 'next/link';
 import StoryView from './StoryView';
 import Nav from '../components/Nav';
 
-export default async function StoryPage({ searchParams }: { searchParams: Promise<{ text?: string; child?: string; idea?: string; length?: string; tone?: string; guestName?: string }> }) {
-  const { text, child, idea, length, tone, guestName } = await searchParams;
+export default async function StoryPage({ searchParams }: { searchParams: Promise<{ title?: string; text?: string; child?: string; idea?: string; length?: string; tone?: string; guestName?: string }> }) {
+  const { title, text, child, idea, length, tone, guestName } = await searchParams;
 
   const editParams: Record<string, string> = { idea: idea ?? '', length: length ?? 'medium', tone: tone ?? 'funny' };
   if (child === 'guest' && guestName) editParams.guestName = guestName;
@@ -30,6 +30,7 @@ export default async function StoryPage({ searchParams }: { searchParams: Promis
       <main className="page-main mx-auto">
         <h1>Your Story</h1>
         <StoryView
+          title={title}
           text={text}
           child={child ?? ''}
           idea={idea ?? ''}

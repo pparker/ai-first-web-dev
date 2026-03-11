@@ -16,7 +16,7 @@ export async function POST(request: Request) {
   try {
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 1024,
+      max_tokens: 2048,
       messages: [
         {
           role: 'user',
@@ -28,17 +28,24 @@ export async function POST(request: Request) {
 - Length: ${targetLength}. Stay within this range.
 - Audience: children aged 5–11. Use simple, clear language and short sentences.
 - Structure: include a clear beginning, middle, and satisfying ending.
-- Output only the story text. Do not include a title, headings, author notes, or any explanation.`,
+
+Return your response as a JSON object with exactly two fields:
+- "title": a short, child-friendly title for the story (4–8 words)
+- "story": the full story text with no title, headings, or extra commentary`,
         },
       ],
     });
 
-    const story = response.content
+    const raw = response.content
       .filter((block) => block.type === 'text')
       .map((block) => block.text)
-      .join('\n');
+      .join('\n')
+      .replace(/^```(?:json)?\s*/i, '')
+      .replace(/\s*```$/, '')
+      .trim();
 
-    return NextResponse.json({ story });
+    const { title, story } = JSON.parse(raw);
+    return NextResponse.json({ title, story });
   } catch (error) {
     console.error('Story generation failed:', error);
     return NextResponse.json(

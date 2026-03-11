@@ -6,6 +6,7 @@ import Nav from '../components/Nav';
 const STORAGE_KEY = 'write-with-me-stories';
 
 type SavedStory = {
+  title?: string;
   child: string;
   idea: string;
   tone: string;
@@ -49,14 +50,16 @@ export default function StoriesPage() {
         <ul className="stories-list">
           {stories.map((s) => {
             const qsParams: Record<string, string> = { text: s.text, child: s.child, idea: s.idea, length: s.length, tone: s.tone };
+            if (s.title) qsParams.title = s.title;
             if (s.guestName) qsParams.guestName = s.guestName;
             const qs = new URLSearchParams(qsParams);
+            const author = s.guestName ? `${s.guestName} (guest)` : s.child;
             return (
               <li key={s.savedAt} className="story-item">
                 <Link href={`/story?${qs.toString()}`} className="bold">
-                  {s.guestName ? `${s.guestName} (guest)` : s.child} — {s.idea}
+                  {s.title ?? `${author} — ${s.idea}`}
                 </Link>
-                <p className="meta-text">{s.tone} · {s.length} · {new Date(s.savedAt).toLocaleDateString()}</p>
+                <p className="meta-text">{author} · {s.tone} · {s.length} · {new Date(s.savedAt).toLocaleDateString()}</p>
                 <button onClick={() => deleteStory(s.savedAt)} className="btn-danger">Delete</button>
               </li>
             );

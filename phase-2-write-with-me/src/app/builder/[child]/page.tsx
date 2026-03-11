@@ -54,7 +54,7 @@ export default function BuilderPage() {
         return;
       }
 
-      const qs = new URLSearchParams({ text: data.story, child, idea, length, tone, ...(isGuest && { guestName: guestName.trim() }) });
+      const qs = new URLSearchParams({ title: data.title ?? '', text: data.story, child, idea, length, tone, ...(isGuest && { guestName: guestName.trim() }) });
       router.push(`/story?${qs.toString()}`);
     } catch {
       setError('Could not reach the server. Please check your connection and try again.');
