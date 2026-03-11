@@ -16,7 +16,7 @@ export default function StorySaver({ child, idea, tone, length, text, guestName 
     if (guestName) entry.guestName = guestName;
     const updated = [entry, ...existing];
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  }, []);
+  }, [text]);
 
   return null;
 }
