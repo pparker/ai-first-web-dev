@@ -1,11 +1,10 @@
 'use client';
 import { useEffect } from 'react';
+import type { SavedStory } from '../../lib/story-types';
 
 const STORAGE_KEY = 'write-with-me-stories';
 
-export default function StorySaver({ title, child, idea, tone, length, text, guestName }: {
-  title?: string; child: string; idea: string; tone: string; length: string; text: string; guestName?: string;
-}) {
+export default function StorySaver({ title, child, idea, tone, length, text, guestName }: Omit<SavedStory, 'savedAt'>) {
   useEffect(() => {
     const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]');
     const isDuplicate = existing.some((s: { child: string; idea: string; tone: string; length: string; text: string }) =>

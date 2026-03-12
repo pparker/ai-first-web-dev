@@ -2,19 +2,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Nav from '../components/Nav';
+import type { SavedStory } from '../../lib/story-types';
 
 const STORAGE_KEY = 'write-with-me-stories';
-
-type SavedStory = {
-  title?: string;
-  child: string;
-  idea: string;
-  tone: string;
-  length: string;
-  text: string;
-  savedAt: number;
-  guestName?: string;
-};
 
 export default function StoriesPage() {
   const [stories, setStories] = useState<SavedStory[]>([]);

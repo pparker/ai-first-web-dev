@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
 Return your response as a JSON object with exactly two fields:
 - "title": a short, child-friendly title for the story (4–8 words)
-- "story": the full story text with no title, headings, or extra commentary`,
+- "text": the full story text with no title, headings, or extra commentary`,
         },
       ],
     });
@@ -44,8 +44,8 @@ Return your response as a JSON object with exactly two fields:
       .replace(/\s*```$/, '')
       .trim();
 
-    const { title, story } = JSON.parse(raw);
-    return NextResponse.json({ title, story });
+    const { title, text } = JSON.parse(raw);
+    return NextResponse.json({ title, text });
   } catch (error) {
     console.error('Story generation failed:', error);
     return NextResponse.json(

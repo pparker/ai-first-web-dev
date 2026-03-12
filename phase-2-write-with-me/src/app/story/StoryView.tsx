@@ -3,14 +3,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import StorySaver from './StorySaver';
+import type { GeneratedStory } from '../../lib/story-types';
 
-type Props = {
-  title?: string;
-  text: string;
-  child: string;
-  idea: string;
-  tone: string;
-  length: string;
+type Props = GeneratedStory & {
   guestName?: string;
   editHref: string;
   canRegenerate: boolean;
@@ -37,7 +32,7 @@ export default function StoryView({ title, text: initialText, child, idea, tone,
         setError(data.error ?? 'Something went wrong. Please try again.');
         return;
       }
-      const qsParams: Record<string, string> = { title: data.title ?? '', text: data.story, child, idea, tone, length };
+      const qsParams: Record<string, string> = { title: data.title ?? '', text: data.text, child, idea, tone, length };
       if (guestName) qsParams.guestName = guestName;
       router.push(`/story?${new URLSearchParams(qsParams).toString()}`);
     } catch {
