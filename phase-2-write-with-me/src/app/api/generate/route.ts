@@ -3,6 +3,12 @@ import Anthropic from '@anthropic-ai/sdk';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+const toneDescriptions: Record<string, string> = {
+  funny: 'Use playful humour, comic situations, and light wordplay.',
+  calm: 'Use gentle pacing, warm descriptions, and a peaceful, soothing atmosphere.',
+  adventurous: 'Use exciting action, a sense of discovery, and dramatic but age-appropriate tension.',
+};
+
 export async function POST(request: Request) {
   const { child, idea, length, tone } = await request.json();
 
@@ -12,6 +18,7 @@ export async function POST(request: Request) {
     long: 'between 600 and 1200 words',
   };
   const targetLength = wordCount[length] ?? 'around 400 words';
+  const toneDescription = toneDescriptions[tone] ?? '';
 
   try {
     const response = await client.messages.create({
@@ -24,10 +31,11 @@ export async function POST(request: Request) {
 
 - The main character is a child named ${child}.
 - The story is based on this idea: ${idea}
-- Tone: ${tone}. Keep this tone consistent throughout.
+- Tone: ${tone}. ${toneDescription} Maintain this tone from start to finish.
 - Length: ${targetLength}. Stay within this range.
-- Audience: children aged 5–11. Use simple, clear language and short sentences.
-- Structure: include a clear beginning, middle, and satisfying ending.
+- Audience: children aged 8–11. Use simple, vivid language and short sentences.
+- Structure: include a clear beginning, middle, and satisfying ending. The ending must feel resolved and complete — not abrupt or left hanging.
+- Do not include moral lessons or heavy-handed messages — let the story speak for itself.
 
 Return your response as a JSON object with exactly two fields:
 - "title": a short, child-friendly title for the story (4–8 words)
