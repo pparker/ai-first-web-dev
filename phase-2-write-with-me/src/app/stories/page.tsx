@@ -1,23 +1,20 @@
-'use client';
-import { useEffect, useState } from 'react';
+import { sql } from '@vercel/postgres';
 import Link from 'next/link';
 import Nav from '../components/Nav';
+import StoryDeleteButton from './StoryDeleteButton';
 import type { SavedStory } from '../../lib/story-types';
 
-const STORAGE_KEY = 'write-with-me-stories';
+async function getStories(): Promise<SavedStory[]> {
+  const { rows } = await sql`
+    SELECT id, title, child, guest_name AS "guestName", idea, tone, length, text, created_at
+    FROM stories
+    ORDER BY created_at DESC
+  `;
+  return rows as SavedStory[];
+}
 
-export default function StoriesPage() {
-  const [stories, setStories] = useState<SavedStory[]>([]);
-
-  useEffect(() => {
-    setStories(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]'));
-  }, []);
-
-  function deleteStory(savedAt: number) {
-    const updated = stories.filter((s) => s.savedAt !== savedAt);
-    setStories(updated);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  }
+export default async function StoriesPage() {
+  const stories = await getStories();
 
   if (stories.length === 0) {
     return (
@@ -39,18 +36,18 @@ export default function StoriesPage() {
         <h1>Saved Stories</h1>
         <ul className="stories-list">
           {stories.map((s) => {
-            const qsParams: Record<string, string> = { text: s.text, child: s.child, idea: s.idea, length: s.length, tone: s.tone };
+            const qsParams: Record<string, string> = { id: s.id, text: s.text, child: s.child, idea: s.idea, length: s.length, tone: s.tone };
             if (s.title) qsParams.title = s.title;
             if (s.guestName) qsParams.guestName = s.guestName;
             const qs = new URLSearchParams(qsParams);
             const author = s.guestName ? `${s.guestName} (guest)` : s.child;
             return (
-              <li key={s.savedAt} className="story-item">
+              <li key={s.id} className="story-item">
                 <Link href={`/story?${qs.toString()}`} className="bold">
                   {s.title ?? `${author} — ${s.idea}`}
                 </Link>
-                <p className="meta-text">{author} · {s.tone} · {s.length} · {new Date(s.savedAt).toLocaleDateString()}</p>
-                <button onClick={() => deleteStory(s.savedAt)} className="btn-danger">Delete</button>
+                <p className="meta-text">{author} · {s.tone} · {s.length} · {new Date(s.created_at).toLocaleDateString()}</p>
+                <StoryDeleteButton id={s.id} />
               </li>
             );
           })}

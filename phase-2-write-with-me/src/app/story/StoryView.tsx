@@ -6,12 +6,13 @@ import StorySaver from './StorySaver';
 import type { GeneratedStory } from '../../lib/story-types';
 
 type Props = GeneratedStory & {
+  id?: string;
   guestName?: string;
   editHref: string;
   canRegenerate: boolean;
 };
 
-export default function StoryView({ title, text: initialText, child, idea, tone, length, guestName, editHref, canRegenerate }: Props) {
+export default function StoryView({ id, title, text: initialText, child, idea, tone, length, guestName, editHref, canRegenerate }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -32,7 +33,7 @@ export default function StoryView({ title, text: initialText, child, idea, tone,
         setError(data.error ?? 'Something went wrong. Please try again.');
         return;
       }
-      const qsParams: Record<string, string> = { title: data.title ?? '', text: data.text, child, idea, tone, length };
+      const qsParams: Record<string, string> = { id: data.id, title: data.title ?? '', text: data.text, child, idea, tone, length };
       if (guestName) qsParams.guestName = guestName;
       router.push(`/story?${new URLSearchParams(qsParams).toString()}`);
     } catch {
@@ -44,7 +45,7 @@ export default function StoryView({ title, text: initialText, child, idea, tone,
 
   return (
     <>
-      <StorySaver title={title} child={child} idea={idea} tone={tone} length={length} text={initialText} guestName={guestName} />
+      <StorySaver id={id} title={title} child={child} idea={idea} tone={tone} length={length} text={initialText} guestName={guestName} />
       {title && <h2 className="story-title">{title}</h2>}
       <div className="story-body">
         {initialText.split(/\n\n+/).map((para, i) => (

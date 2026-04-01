@@ -11,6 +11,7 @@ export type GeneratedStory = StoryDraft & {
 };
 
 export type SavedStory = GeneratedStory & {
-  savedAt: number;
+  id: string;
+  created_at: string;
   guestName?: string;
 };
