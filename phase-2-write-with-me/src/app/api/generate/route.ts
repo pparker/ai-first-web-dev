@@ -82,7 +82,7 @@ Return your response as a JSON object with exactly two fields:
       .trim();
 
     const { title, text } = JSON.parse(raw);
-    return NextResponse.json({ title, text });
+    return NextResponse.json({ id: crypto.randomUUID(), title, text });
   } catch (error) {
     console.error('Story generation failed:', error);
     return NextResponse.json(
