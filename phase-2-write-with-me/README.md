@@ -79,3 +79,13 @@ source .env.local
 set +a
 BASE_URL=https://your-preview-url.vercel.app npx playwright test
 ```
+
+
+### Unit tests
+
+Run the unit tests:
+```bash
+npm run test:unit
+```
+
+These cover the rate-limiting logic in `src/lib/rate-limiter.ts` using the built-in Node test runner via `tsx`.
