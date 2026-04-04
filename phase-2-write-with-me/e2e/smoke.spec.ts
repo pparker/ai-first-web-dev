@@ -16,8 +16,9 @@ test('generate, view, save, and delete a story', async ({ page }) => {
   // Capture the generated story title
   const title = (await page.locator('.story-title').textContent())?.trim();
 
-  // Wait for the background save (StorySaver POST) to complete
-  await page.waitForLoadState('networkidle');
+  // Verify the story page survives a reload (confirms DB-backed route works)
+  await page.reload();
+  await expect(page.locator('.story-body')).toBeVisible();
 
   // Navigate to Saved Stories
   await page.getByRole('link', { name: 'Saved Stories' }).click();
