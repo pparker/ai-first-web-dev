@@ -1,4 +1,6 @@
 import { sql } from '@vercel/postgres';
+
+export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import Nav from '../components/Nav';
 import StoryDeleteButton from './StoryDeleteButton';
