@@ -54,8 +54,17 @@ export default function BuilderPage() {
         return;
       }
 
-      const qs = new URLSearchParams({ id: data.id, title: data.title ?? '', text: data.text, child, idea, length, tone, ...(isGuest && { guestName: guestName.trim() }) });
-      router.push(`/story?${qs.toString()}`);
+      const saveRes = await fetch('/api/stories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: data.id, title: data.title ?? null, child, guestName: isGuest ? guestName.trim() : undefined, idea, tone, length, text: data.text }),
+      });
+      if (!saveRes.ok) {
+        setError('Could not save your story. Please try again.');
+        return;
+      }
+
+      router.push(`/story/${data.id}`);
     } catch {
       setError('Could not reach the server. Please check your connection and try again.');
     } finally {
