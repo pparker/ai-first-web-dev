@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const testStory = (id: string) => ({
   id,
-  title: 'Playwright API Test',
+  title: `Playwright API Test ${id.slice(0, 8)}`,
   child: 'ellie',
   idea: 'playwright-api-test',
   tone: 'funny',
