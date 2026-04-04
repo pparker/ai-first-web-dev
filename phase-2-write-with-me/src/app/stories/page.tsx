@@ -38,14 +38,10 @@ export default async function StoriesPage() {
         <h1>Saved Stories</h1>
         <ul className="stories-list">
           {stories.map((s) => {
-            const qsParams: Record<string, string> = { id: s.id, text: s.text, child: s.child, idea: s.idea, length: s.length, tone: s.tone };
-            if (s.title) qsParams.title = s.title;
-            if (s.guestName) qsParams.guestName = s.guestName;
-            const qs = new URLSearchParams(qsParams);
             const author = s.guestName ? `${s.guestName} (guest)` : s.child;
             return (
               <li key={s.id} className="story-item">
-                <Link href={`/story?${qs.toString()}`} className="bold">
+                <Link href={`/story/${s.id}`} className="bold">
                   {s.title ?? `${author} — ${s.idea}`}
                 </Link>
                 <p className="meta-text">{author} · {s.tone} · {s.length} · {new Date(s.created_at).toLocaleDateString()}</p>
