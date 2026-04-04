@@ -34,3 +34,48 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+## Testing
+
+### Local
+
+Run all tests:
+```bash
+npx playwright test
+```
+
+UI mode (watch steps run through):
+```bash
+npx playwright test --ui
+```
+
+Debug mode:
+```bash
+npx playwright test --debug
+```
+
+Run with a visible browser:
+```bash
+npx playwright test --headed
+```
+
+Run the E2E smoke test only:
+```bash
+npx playwright test e2e/smoke.spec.ts
+```
+
+Run the API tests only:
+```bash
+npx playwright test e2e/api.spec.ts
+```
+
+### Against a Vercel preview or production deployment
+
+Load the Vercel bypass secret from `.env.local` and run against a deployed URL:
+```bash
+set -a
+source .env.local
+set +a
+BASE_URL=https://your-preview-url.vercel.app npx playwright test
+```
