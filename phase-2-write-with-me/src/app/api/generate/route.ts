@@ -1,26 +1,10 @@
 import { NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
+import { isRateLimited } from '@/lib/rate-limiter';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-const RATE_LIMIT = 5;
-const WINDOW_MS = 60_000;
 const requestLog = new Map<string, number[]>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const cutoff = now - WINDOW_MS;
-  const timestamps = (requestLog.get(ip) ?? []).filter((t) => t > cutoff);
-
-  if (timestamps.length >= RATE_LIMIT) {
-    requestLog.set(ip, timestamps);
-    return true;
-  }
-
-  timestamps.push(now);
-  requestLog.set(ip, timestamps);
-  return false;
-}
 
 const toneDescriptions: Record<string, string> = {
   funny: 'Use playful humour, comic situations, and light wordplay.',
@@ -32,7 +16,7 @@ export async function POST(request: Request) {
   const forwarded = request.headers.get('x-forwarded-for');
   const ip = forwarded ? forwarded.split(',')[0].trim() : null;
 
-  if (ip && isRateLimited(ip)) {
+  if (ip && isRateLimited(ip, requestLog, Date.now())) {
     return NextResponse.json(
       { error: 'Too many requests, please slow down.' },
       { status: 429 }
