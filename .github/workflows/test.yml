@@ -35,6 +35,8 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 20
+          cache: 'npm'
+          cache-dependency-path: 'phase-2-write-with-me/package-lock.json'
 
       - run: npm ci
 
